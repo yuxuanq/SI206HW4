@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 ## SI 206 - W17 - HW4
 ## COMMENT WITH:
-## Your section day/time:
+## Your section day/time: 003/Thursday 6pm
 ## Any names of people you worked with on this assignment:
 
 #####################
@@ -46,7 +46,7 @@ nytimes_headlines = []
 all_headlines = []
 Nhead = 10
 count = 0
-soup = BeautifulSoup(html_text)
+soup = BeautifulSoup(html_text, "html.parser")
 for head in soup.find_all(class_="story-heading"):
 	if head.a:
 		all_headlines.append(head.a.text.replace("\n", " ").strip())
@@ -74,10 +74,19 @@ while count < Nhead:
 
 response = requests.get("https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All")
 htmldoc = response.text
-
 soup = BeautifulSoup(htmldoc,"html.parser")
 people = soup.find_all("div",{"class":"views-row"})
 umsi_titles = {}
+si_names = []
+count = 0
+people = BeautifulSoup(str(people), "html.parser")
+for names in people.find_all(class_ = "field field-name-title field-type-ds field-label-hidden"):
+    si_names.append(names.text)
+for titles in people.find_all(class_ = "field field-name-field-person-titles field-type-text field-label-hidden"):
+    umsi_titles[si_names[count]] = titles.text
+    count += 1
+
+
 
 ## It may be helpful to translate the following from English to code:
 
